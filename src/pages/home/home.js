@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie'
 
 const cookies = new Cookies()
 const meicimg = "logo_meic.jpg";
-const alegaimg = "logo.png";
+const alegaimg = "logo_alega.png";
 const URI = "https://fwmback-production.up.railway.app/asepress";
 
 
