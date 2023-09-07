@@ -88,7 +88,8 @@ function Dashboard() {
   // Función de búsqueda que combina los filtros
   const buscarReportes = () => {
     // Obtener los datos de la base de datos
-    const filt = dreportes.filter((reporte) => {
+    const filt = dreportes.filter((reporte) => 
+    /*{
       const [fechaPart, horaPart] = reporte.fchareg.split(', ');
   
       // Separar la cadena de fecha en día, mes y año
@@ -102,7 +103,7 @@ function Dashboard() {
         // Crear un objeto Date con los valores extraídos
         const reportDate = new Date(ano, mes - 1, dia, horas, minutos, segundos);
   
-        return (
+        return (*/
           reporte.id_report.toString().includes(filtroNReport) &&
           reporte.id_agente?.toLowerCase().includes(filtroAgent.toLowerCase()) &&
           reporte.fchareg.includes(filtroFchCreado) &&
@@ -130,12 +131,12 @@ function Dashboard() {
           reporte.razon_social?.toLowerCase().includes(filtroRsocial.toLowerCase()) &&
           reporte.nombre_fantasia?.toLowerCase().includes(filtroFantasia.toLowerCase()) &&
           reporte.desch?.toLowerCase().includes(filtroDesch.toLowerCase()) &&
-          reporte.respe?.toLowerCase().includes(filtroRespe.toLowerCase()) &&
+          reporte.respe?.toLowerCase().includes(filtroRespe.toLowerCase()) /*&&
           (!startDateFilter || reportDate >= startOfDay(new Date(startDateFilter))) &&
-          (!endDateFilter || reportDate <= endOfDay(new Date(endDateFilter)))
+          (!endDateFilter || reportDate <= endOfDay(new Date(endDateFilter)))*/
         );
-      }
-    });
+     /* }
+    });*/
 
     
     
@@ -152,9 +153,9 @@ function Dashboard() {
     console.log(numPaginas)
   };
 
-  // Manejadores de eventos para los cambios en los inputs de los filtros
+   // Manejadores de eventos para los cambios en los inputs de los filtros
 
-  const handleFiltroNReport = (e) => {
+   const handleFiltroNReport = (e) => {
     setFiltroNReport(e.target.value);
     setCurrentPage(1);
   };
@@ -588,6 +589,7 @@ function Dashboard() {
           </div>
           
 
+          {/*<button className="btn btn-success" onClick={resetDates}>Reiniciar</button>*/}
           <button className="d-none btn btn-success me-1">Exportar datos a PDF</button>
           <button className="d-none btn btn-success">Exportar datos a CSV </button>
       </div>
@@ -691,6 +693,27 @@ function Dashboard() {
             )}
           </tbody>
         </table>
+        {/* Este es el paginador viejo
+        
+        <nav aria-label="...">
+    <ul className="pagination">
+      {Array.from({ length: numPaginas }, (_, i) => (
+        <li
+          key={i}
+          className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+        >
+          <a
+            className="page-link"
+            href="#"
+            onClick={() => handlePageChange(i + 1)}
+          >
+            {i + 1}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+        */}
         <nav aria-label="...">
   <ul className="pagination">
     {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
