@@ -587,8 +587,23 @@ function Dashboard() {
             dateFormat="dd/MM/yyyy, HH:mm:ss"
           />
           </div>
-          
-
+          <nav aria-label="...">
+  <ul className="d-flex flex-row mb-1 ms-2 pagination">
+    <li className="page-item">
+      <select
+        className="form-select"
+        onChange={(e) => handlePageChange(parseInt(e.target.value))}
+        value={currentPage}
+      >
+        {Array.from({ length: numPaginas }, (_, i) => (
+          <option key={i} value={i + 1}>
+            Página {i + 1}
+          </option>
+        ))}
+      </select>
+    </li>
+  </ul>
+</nav>
           {/*<button className="btn btn-success" onClick={resetDates}>Reiniciar</button>*/}
           <button className="d-none btn btn-success me-1">Exportar datos a PDF</button>
           <button className="d-none btn btn-success">Exportar datos a CSV </button>
@@ -713,7 +728,7 @@ function Dashboard() {
       ))}
     </ul>
   </nav>
-        */}
+        
         <nav aria-label="...">
   <ul className="pagination">
     {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
@@ -731,8 +746,27 @@ function Dashboard() {
       </li>
     ))}
   </ul>
+</nav>*/}
+<nav aria-label="...">
+  <ul className="pagination">
+    <li className="page-item">
+      <select
+        className="form-select"
+        onChange={(e) => {
+          handlePageChange(parseInt(e.target.value));
+          window.scrollTo(0, 0); // Esta línea volverá al principio de la página
+        }}
+        value={currentPage}
+      >
+        {Array.from({ length: numPaginas }, (_, i) => (
+          <option key={i} value={i + 1}>
+            Página {i + 1}
+          </option>
+        ))}
+      </select>
+    </li>
+  </ul>
 </nav>
-
       </div>
     </>
   );
