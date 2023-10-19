@@ -150,3 +150,12 @@ body {
   table.table-container {
     width: 110%;
 }
+
+.datepicker {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
