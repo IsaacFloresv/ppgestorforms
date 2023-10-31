@@ -10,6 +10,7 @@ import "./dashboard.css";
 import Select from "react-select";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { useRef } from 'react';
 
 const cookies = new Cookies();
 const meicimg = "logo_meic.jpg";
@@ -89,6 +90,25 @@ function Dashboard() {
   const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
   const endPage = Math.min(numPaginas, startPage + maxPagesToShow - 1);
   const [rowsCount, setRowsCount] = useState(0);
+
+  //Estados para borrar filtros
+  const filtroNReportRef = useRef();
+  const filtroFchCreadoRef = useRef();
+  const filtroUsuario_sRef = useRef();
+  const filtroUs_obserRef = useRef();
+  const filtroNdiaRef = useRef();
+  const filtroNombaRef = useRef();
+  const filtroApell1aRef = useRef();
+  const filtroApell2aRef = useRef();
+  const filtroEmailRef = useRef();
+  const filtroEmail2Ref = useRef();
+  const filtroTelRef = useRef();
+  const filtroTel2Ref = useRef();
+  const filtroNdicRef = useRef();
+  const filtroRsocialRef = useRef();
+  const filtroFantasiaRef = useRef();
+  const filtroDeschRef = useRef();
+  const filtroRespeRef = useRef();
 
   //Estados carga inicial de reportes
   const [isMounted, setIsMounted] = useState(false);
@@ -846,13 +866,64 @@ function Dashboard() {
     endDateFilter,
   ]);
 
+  //Funcion para borrar el filtro de fecha
   const resetDates = () => {
     setStartDateFilter(null);
     setEndDateFilter(null);
     setCurrentPage(1);
   };
 
-
+  //Funcion para borrar todos los filtros
+  const resetAll = () => {
+    setStartDateFilter(null);
+    setEndDateFilter(null);
+    setFiltroNReport("");
+    setSelectedAgents([]);
+    setFiltroFchCreado("");
+    setSelectedStatus([]);
+    setSelectedOrigen([]);
+    setFiltroUsuario_s("");
+    setFiltroUs_obser("");
+    setSelectedTdia([]);
+    setFiltroNdia("");
+    setFiltroNomba("");
+    setFiltroApell1a("");
+    setFiltroApell2a("");
+    setFiltroEmail("");
+    setFiltroEmail2("");
+    setFiltroTel("");
+    setFiltroTel2("");
+    setSelectedProvi([]);
+    setSelectedCanto([]);
+    setSelectedDistr([]);
+    setSelectedMateria([]);
+    setSelectedAsunto([]);
+    setSelectedBien([]);
+    setSelectedTdic([]);
+    setFiltroNdic("");
+    setFiltroRsocial("");
+    setFiltroFantasia("");
+    setFiltroDesch("");
+    setFiltroRespe("");
+    filtroNReportRef.current.value = '';
+    filtroFchCreadoRef.current.value = '';
+    filtroUs_obserRef.current.value = '';
+    filtroUsuario_sRef.current.value = '';
+    filtroNdiaRef.current.value = '';
+    filtroNombaRef.current.value = '';
+    filtroApell1aRef.current.value = '';
+    filtroApell2aRef.current.value = '';
+    filtroEmailRef.current.value = '';
+    filtroEmail2Ref.current.value = '';
+    filtroTelRef.current.value = '';
+    filtroTel2Ref.current.value = '';
+    filtroNdicRef.current.value = '';
+    filtroRsocialRef.current.value = '';
+    filtroFantasiaRef.current.value = '';
+    filtroDeschRef.current.value = '';
+    filtroRespeRef.current.value = '';
+    setCurrentPage(1);
+  };
 
   return (
     <>
@@ -952,14 +1023,14 @@ function Dashboard() {
             className="btn btn-success"
             onClick={() => exportarTodosLosDatos()}
           >
-            Exportar datos a Excel
+            Exportar a Excel
           </button>
           <button
             className="pdf btnpdf"
             onClick={() => exportarTodosLosDatosAPDF()}
             style={{ marginLeft: 10 }}
           >
-            Exportar datos a PDF
+            Exportar a PDF
           </button>
           <div className="d-flex flex-row mb-0 ms-2 datepicker">
             <DatePicker.default
@@ -982,7 +1053,14 @@ function Dashboard() {
             />
           </div>
           <button className="btn btn-success" onClick={() => resetDates()}>
-            Eliminar filtro fecha
+            Eliminar fechas
+          </button>
+          <button
+            className="deletebtn btndelete"
+            onClick={() => resetAll()}
+            style={{ marginLeft: 10 }}
+          >
+            Eliminar filtros
           </button>
           <nav aria-label="...">
             <ul className="d-flex flex-row mb-1 ms-2 pagination">
@@ -1002,12 +1080,6 @@ function Dashboard() {
             </ul>
           </nav>
           <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
-          <button className="d-none btn btn-success me-1">
-            Exportar datos a PDF
-          </button>
-          <button className="d-none btn btn-success">
-            Exportar datos a CSV{" "}
-          </button>
         </div>
       </nav>
       <div className="container-fluid position-absolute start-0 w-auto p-3">
@@ -1056,7 +1128,7 @@ function Dashboard() {
           <tbody>
             <tr>
               <td>
-                <input id="buscarNReport" onChange={handleFiltroNReport} />
+                <input id="buscarNReport" ref={filtroNReportRef} onChange={handleFiltroNReport} />
               </td>
               <td>
                 <Select
@@ -1068,7 +1140,7 @@ function Dashboard() {
                 />
               </td>
               <td>
-                <input id="buscarFchCreado" onChange={handleFiltroFchCreado} />
+                <input id="buscarFchCreado" ref={filtroFchCreadoRef} onChange={handleFiltroFchCreado} />
               </td>
               <td>
                 <Select
@@ -1089,10 +1161,10 @@ function Dashboard() {
                 />
               </td>
               <td>
-                <input id="buscarUsuario_s" onChange={handleFiltroUsuario_s} />
+                <input id="buscarUsuario_s" ref={filtroUsuario_sRef} onChange={handleFiltroUsuario_s} />
               </td>
               <td>
-                <input id="buscarUs_obser" onChange={handleFiltroUs_obser} />
+                <input id="buscarUs_obser" ref={filtroUs_obserRef} onChange={handleFiltroUs_obser} />
               </td>
               <td>
                 <Select
@@ -1104,28 +1176,28 @@ function Dashboard() {
                 />
               </td>
               <td>
-                <input id="buscarNdia" onChange={handleFiltroNdia} />
+                <input id="buscarNdia" ref={filtroNdiaRef} onChange={handleFiltroNdia} />
               </td>
               <td>
-                <input id="buscarNomba" onChange={handleFiltroNomba} />
+                <input id="buscarNomba" ref={filtroNombaRef} onChange={handleFiltroNomba} />
               </td>
               <td>
-                <input id="buscarApell1a" onChange={handleFiltroApell1a} />
+                <input id="buscarApell1a" ref={filtroApell1aRef} onChange={handleFiltroApell1a} />
               </td>
               <td>
-                <input id="buscarApell2a" onChange={handleFiltroApell2a} />
+                <input id="buscarApell2a" ref={filtroApell2aRef} onChange={handleFiltroApell2a} />
               </td>
               <td>
-                <input id="buscarEmail" onChange={handleFiltroEmail} />
+                <input id="buscarEmail" ref={filtroEmailRef} onChange={handleFiltroEmail} />
               </td>
               <td>
-                <input id="buscarEmail2" onChange={handleFiltroEmail2} />
+                <input id="buscarEmail2" ref={filtroEmail2Ref} onChange={handleFiltroEmail2} />
               </td>
               <td>
-                <input id="buscarTel" onChange={handleFiltroTel} />
+                <input id="buscarTel" ref={filtroTelRef} onChange={handleFiltroTel} />
               </td>
               <td>
-                <input id="buscarTel2" onChange={handleFiltroTel2} />
+                <input id="buscarTel2" ref={filtroTel2Ref} onChange={handleFiltroTel2} />
               </td>
               <td>
               <Select
@@ -1191,19 +1263,19 @@ function Dashboard() {
                 />
               </td>
               <td>
-                <input id="buscarNdic" onChange={handleFiltroNdic} />
+                <input id="buscarNdic" ref={filtroNdicRef} onChange={handleFiltroNdic} />
               </td>
               <td>
-                <input id="buscarRsocial" onChange={handleFiltroRsocial} />
+                <input id="buscarRsocial" ref={filtroRsocialRef} onChange={handleFiltroRsocial} />
               </td>
               <td>
-                <input id="buscarFantasia" onChange={handleFiltroFantasia} />
+                <input id="buscarFantasia" ref={filtroFantasiaRef} onChange={handleFiltroFantasia} />
               </td>
               <td>
-                <input id="buscarDesch" onChange={handleFiltroDesch} />
+                <input id="buscarDesch" ref={filtroDeschRef} onChange={handleFiltroDesch} />
               </td>
               <td>
-                <input id="buscarRespe" onChange={handleFiltroRespe} />
+                <input id="buscarRespe" ref={filtroRespeRef} onChange={handleFiltroRespe} />
               </td>
             </tr>
             {reportes.map((dreportes) => (
