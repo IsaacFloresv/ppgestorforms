@@ -337,57 +337,26 @@ function Dashboard() {
 
         const selectedAgentValues = selectedAgents.map((agent) => agent.value);
         const agentMatches = selectedAgentValues.includes(reporte.id_agente);
-
-        const selectedStatusValues = selectedStatus.map(
-          (status) => status.value
-        );
+        const selectedStatusValues = selectedStatus.map((status) => status.value);
         const statusMatches = selectedStatusValues.includes(reporte.status);
-
-        const selectedOrigenValues = selectedOrigen.map(
-          (origen) => origen.value
-        );
+        const selectedOrigenValues = selectedOrigen.map((origen) => origen.value);
         const origenMatches = selectedOrigenValues.includes(reporte.origen_r);
-
-        const selectedTdiaValues = selectedTdia.map(
-          (tdia) => tdia.value
-        );
+        const selectedTdiaValues = selectedTdia.map((tdia) => tdia.value);
         const tdiaMatches = selectedTdiaValues.includes(reporte.tdia);
-
-        const selectedProviValues = selectedProvi.map(
-          (provi) => provi.value
-        );
+        const selectedProviValues = selectedProvi.map((provi) => provi.value);
         const proviMatches = selectedProviValues.includes(reporte.provi);
-
-        const selectedCantoValues = selectedCanto.map(
-          (canto) => canto.value
-        );
+        const selectedCantoValues = selectedCanto.map((canto) => canto.value);
         const cantoMatches = selectedCantoValues.includes(reporte.canto);
-
-        const selectedDistrValues = selectedDistr.map(
-          (distr) => distr.value
-        );
+        const selectedDistrValues = selectedDistr.map((distr) => distr.value);
         const distrMatches = selectedDistrValues.includes(reporte.distr);
-
-        const selectedMateriaValues = selectedMateria.map(
-          (materia) => materia.value
-        );
+        const selectedMateriaValues = selectedMateria.map((materia) => materia.value);
         const materiaMatches = selectedMateriaValues.includes(reporte.materia);
-        
-        const selectedAsuntoValues = selectedAsunto.map(
-          (asunto) => asunto.value
-        );
+        const selectedAsuntoValues = selectedAsunto.map((asunto) => asunto.value);
         const asuntoMatches = selectedAsuntoValues.includes(reporte.asunto);
-
-        const selectedBienValues = selectedBien.map(
-          (bien) => bien.value
-        );
+        const selectedBienValues = selectedBien.map((bien) => bien.value);
         const bienMatches = selectedBienValues.includes(reporte.bien);
-
-        const selectedTdicValues = selectedTdic.map(
-          (tdic) => tdic.value
-        );
+        const selectedTdicValues = selectedTdic.map((tdic) => tdic.value);
         const tdicMatches = selectedTdicValues.includes(reporte.tdic);
-
 
         return (
           nreporte.some((nreport) => reporte.id_report?.toString().includes(nreport)) &&
@@ -1063,7 +1032,7 @@ function Dashboard() {
             Eliminar filtros
           </button>
           <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
-          <nav aria-label="..." style={{ marginLeft: 630 }}>
+          <nav aria-label="..." style={{ marginLeft: 230 }}>
             <ul className="d-flex flex-row mb-1 ms-2 pagination">
               <li className="page-item">
                 <select
@@ -1080,7 +1049,6 @@ function Dashboard() {
               </li>
             </ul>
           </nav>
-          {/*<button onClick={aplicarFiltrosPredeterminados}>Filtrar por Esteban Hidalgo, Formulario web y CARTAGO</button>*/}
         </div>
       </nav>
       <div className="container-fluid position-absolute start-0 w-auto p-3">
@@ -1089,16 +1057,10 @@ function Dashboard() {
           <thead>
             <tr>
               <th scope="col"># Reporte</th>
-              <th scope="col" class="agente-column">
-                Agente
-              </th>
+              <th scope="col" class="agente-column">Agente</th>
               <th scope="col">Creado</th>
-              <th scope="col" class="status-column">
-                Estado
-              </th>
-              <th scope="col" class="origen-column">
-                Origen
-              </th>
+              <th scope="col" class="status-column">Estado</th>
+              <th scope="col" class="origen-column">Origen</th>
               <th scope="col">Usuario Esp.</th>
               <th scope="col">Observación</th>
               <th scope="col" class="tid-column">Tipo Ident.</th>
@@ -1113,9 +1075,7 @@ function Dashboard() {
               <th scope="col" class="provi-column">Provincia</th>
               <th scope="col" class="canto-column">Canton</th>
               <th scope="col" class="distr-column">Distrito</th>
-              <th scope="col" class="materia-column">
-                Materia
-              </th>
+              <th scope="col" class="materia-column">Materia</th>
               <th scope="col" class="asunto-column">Asunto Consult.</th>
               <th scope="col" class="bien-column">Bien</th>
               <th scope="col" class="tid-column">Tipo Ident. Comerciante</th>
