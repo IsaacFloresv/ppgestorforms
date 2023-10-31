@@ -49,21 +49,40 @@ function Login() {
          data: bodyContent,
        }
        
-       try{
-        let response = await axios.request(reqOptions)
-          if(response.statusText != "Forbidden" ){
-            const {resp, Agente} = response.data
-            cookies.set('token', resp)
-            cookies.set('info', Agente)
-            navigate('/home')
-            //window.location = '/formpres'
-          }else{
-            alert('El usuario y/o la contraseña no son correctos')
-          }
-       }catch(error){
-        console.log(error)
-        alert('El usuario y/o la contraseña no son correctos')
-       }
+       try {
+        let response = await axios.request(reqOptions);
+        if (response.statusText != "Forbidden") {
+          const { resp, Agente } = response.data;
+          cookies.set('token', resp);
+          cookies.set('info', Agente);
+          navigate('/home');
+        } else {
+          // Mostrar mensaje de error personalizado en el elemento HTML
+          const errorMessage = document.getElementById('error-message');
+          errorMessage.textContent = 'El usuario y/o la contraseña no son correctos.';
+          errorMessage.style.color = 'red';
+          errorMessage.style.fontWeight = 'bold';
+          errorMessage.style.backgroundColor = '#ffe6e6';  // Fondo rosa claro
+          errorMessage.style.border = '1px solid #ff9999'; // Borde rojo claro
+          errorMessage.style.padding = '10px';
+          errorMessage.style.borderRadius = '5px';
+          errorMessage.style['margin-top'] = '20px';
+          errorMessage.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'; // Sombra suave
+        }
+      } catch (error) {
+        console.log(error);
+        // Mostrar mensaje de error personalizado en el elemento HTML
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = 'El usuario y/o la contraseña no son correctos.';
+        errorMessage.style.color = 'red';
+        errorMessage.style.fontWeight = 'bold';
+        errorMessage.style.backgroundColor = '#ffe6e6';  // Fondo rosa claro
+        errorMessage.style.border = '1px solid #ff9999'; // Borde rojo claro
+        errorMessage.style.padding = '10px';
+        errorMessage.style.borderRadius = '5px';
+        errorMessage.style['margin-top'] = '20px';
+        errorMessage.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'; // Sombra suave
+      }
        
       
     }
@@ -75,7 +94,7 @@ function Login() {
       <main className="form-signin">
         <div className="shadow-lg p-2 mb-5 mt-2 bg-body rounded background: transparent">
         <form>
-          <img className="mb-4 mt-4" src="logo.png" alt="Reportes Listos" width="240" height="200" />
+          <img className="mb-4 mt-4 border border-5 rounded-circle" src="logo.png" alt="Reportes Listos" width="160" height="160" />
 
           <div className="form-floating">
             <input type="text" className="form-control" id="user" name='User_id' placeholder="Usuario" onChange={(e) => CargarDatos(e)} autoComplete="off" />
@@ -87,6 +106,8 @@ function Login() {
           </div>
 
           <button className="w-100 btn btn-lg btn-primary" type="submit" onClick={(e)=>LoginCheck(e)}>Ingresar</button>
+          
+          <div id="error-message"></div>
 
         </form>
         </div>
