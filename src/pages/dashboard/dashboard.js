@@ -1031,8 +1031,7 @@ function Dashboard() {
           >
             Eliminar filtros
           </button>
-          <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
-          <nav aria-label="..." style={{ marginLeft: 635 }}>
+          <nav aria-label="...">
             <ul className="d-flex flex-row mb-1 ms-2 pagination">
               <li className="page-item">
                 <select
@@ -1049,6 +1048,7 @@ function Dashboard() {
               </li>
             </ul>
           </nav>
+          <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
         </div>
       </nav>
       <div className="container-fluid position-absolute start-0 w-auto p-3">
