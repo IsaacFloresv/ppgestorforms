@@ -1062,7 +1062,8 @@ function Dashboard() {
           >
             Eliminar filtros
           </button>
-          <nav aria-label="...">
+          <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
+          <nav aria-label="..." style={{ marginLeft: 630 }}>
             <ul className="d-flex flex-row mb-1 ms-2 pagination">
               <li className="page-item">
                 <select
@@ -1079,7 +1080,7 @@ function Dashboard() {
               </li>
             </ul>
           </nav>
-          <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
+          {/*<button onClick={aplicarFiltrosPredeterminados}>Filtrar por Esteban Hidalgo, Formulario web y CARTAGO</button>*/}
         </div>
       </nav>
       <div className="container-fluid position-absolute start-0 w-auto p-3">
