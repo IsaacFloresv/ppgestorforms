@@ -77,6 +77,7 @@ function Dashboard() {
   const [filtroFantasia, setFiltroFantasia] = useState("");
   const [filtroDesch, setFiltroDesch] = useState("");
   const [filtroRespe, setFiltroRespe] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
 
   //Estados del paginado
   const [startDateFilter, setStartDateFilter] = useState(null);
@@ -565,11 +566,6 @@ const obtencionFiltroAgente = (report) => {
     setCurrentPage(1);
   };
 
-  const handleFiltrarClick = () => {
-    buscarReportes();
-    setCurrentPage(1);
-  };
-
   const handleBorrarFiltrosClick = () => {
     buscarReportes();
     const numPaginas = Math.ceil(dreportes.length / itemsPerPage);
@@ -617,42 +613,7 @@ const obtencionFiltroAgente = (report) => {
       reporte["Respuesta Enviada"] = reporte.respe;
       reporte["ID Audio"] = reporte.id_audio;
 
-      // Eliminacion de las columnas originales
-      delete reporte.id_report;
-      delete reporte.id_agente;
-      delete reporte.fchareg;
-      delete reporte.status;
-      delete reporte.origen_r;
-      delete reporte.usuario_s;
-      delete reporte.us_obser;
-      delete reporte.tdia;
-      delete reporte.ndia;
-      delete reporte.nomba;
-      delete reporte.apell1a;
-      delete reporte.apell2a;
-      delete reporte.email;
-      delete reporte.email2;
-      delete reporte.tel;
-      delete reporte.tel2;
-      delete reporte.provi;
-      delete reporte.canto;
-      delete reporte.distr;
-      delete reporte.materia;
-      delete reporte.asunto;
-      delete reporte.bien;
-      delete reporte.tdic;
-      delete reporte.ndic;
-      delete reporte.razon_social;
-      delete reporte.nombre_fantasia;
-      delete reporte.desch;
-      delete reporte.respe;
-      delete reporte.id;
-      delete reporte.fchacomplet;
-      delete reporte.tel_origen;
-      delete reporte.fchahech;
-      delete reporte.fchagar;
-      delete reporte.id_audio;
-      delete reporte.id_correo;
+
     });
 
     const ws = XLSX.utils.json_to_sheet(datosExportar);
@@ -897,6 +858,184 @@ const obtencionFiltroAgente = (report) => {
     setCurrentPage(1);
   };
 
+  //Funciones para vistas
+
+  const opcionesSelect = [
+    { label: "Origen año 2023", value: 1 },
+    { label: "Origen año 2022", value: 2 },
+    // Agrega más opciones si es necesario
+  ];
+
+  const descargarTabla = (opcionSeleccionada) => {
+    // Obtener datos necesarios para la tabla
+    const datosTabla = obtenerDatosParaTabla(opcionSeleccionada);
+  
+    // Crear un libro de Excel
+    const libro = XLSX.utils.book_new();
+    const hojaDatos = XLSX.utils.json_to_sheet(datosTabla);
+    XLSX.utils.book_append_sheet(libro, hojaDatos, 'Reportes');
+  
+    // Escribir el libro en un array buffer
+    const arrayBuffer = XLSX.write(libro, { bookType: 'xlsx', type: 'array' });
+  
+    // Crear un blob a partir del array buffer
+    const blob = new Blob([arrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+    // Generar un enlace de descarga
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'reportes.xlsx';
+    a.click();
+  
+    // Limpiar el objeto URL
+    URL.revokeObjectURL(url);
+  };
+  
+
+  const obtenerDatosParaTabla = (opcionSeleccionada) => {
+    if (opcionSeleccionada === 1) {
+     // Obtén los datos necesarios para la tabla (por ejemplo, los datos filtrados)
+    const datosFiltrados = allreportes.filter(reporte => {
+    const [fechaPart] = reporte.fchareg.split(', ');
+    const [fecha] = fechaPart.split(' ');
+
+    const [dia, mes, ano] = fecha.split('/');
+    return ano === '2023';
+  });
+
+  // Crear un objeto para almacenar el recuento de reportes por origen y mes
+  const recuentoPorMesYOrigen = {};
+
+  // Iterar sobre los reportes y contar por origen y mes
+  datosFiltrados.forEach(reporte => {
+    const nombreMes = obtenerNombreMes(reporte);
+    const origen = reporte.origen_r;
+
+    // Inicializar el recuento si es la primera vez que vemos este origen en este mes
+    if (!recuentoPorMesYOrigen[nombreMes]) {
+      recuentoPorMesYOrigen[nombreMes] = {};
+    }
+    if (!recuentoPorMesYOrigen[nombreMes][origen]) {
+      recuentoPorMesYOrigen[nombreMes][origen] = 0;
+    }
+
+    // Incrementar el recuento
+    recuentoPorMesYOrigen[nombreMes][origen]++;
+  });
+
+  // Transformar el objeto y calcular el total por origen
+  const datosTabla = Object.keys(recuentoPorMesYOrigen).map(mes => {
+    const recuentoPorOrigen = recuentoPorMesYOrigen[mes];
+    const fila = {
+      Mes: mes,
+      ...recuentoPorOrigen,
+    };
+
+    // Calcular el total por origen y agregarlo a la fila
+    fila.Total = Object.values(recuentoPorOrigen).reduce((total, count) => total + count, 0);
+
+    return fila;
+  });
+
+  // Agregar la fila de totales al final
+  const filaTotales = {
+    Mes: 'Total',
+    ...Object.keys(recuentoPorMesYOrigen).reduce((totales, mes) => {
+      Object.keys(recuentoPorMesYOrigen[mes]).forEach(origen => {
+        if (!totales[origen]) {
+          totales[origen] = 0;
+        }
+        totales[origen] += recuentoPorMesYOrigen[mes][origen];
+      });
+      return totales;
+    }, {}),
+  };
+
+  datosTabla.push(filaTotales);
+
+  return datosTabla;
+    }
+    else if (opcionSeleccionada === 2) {
+     // Obtén los datos necesarios para la tabla (por ejemplo, los datos filtrados)
+  const datosFiltrados = allreportes.filter(reporte => {
+    const [fechaPart] = reporte.fchareg.split(', ');
+    const [fecha] = fechaPart.split(' ');
+
+    const [dia, mes, ano] = fecha.split('/');
+    return ano === '2022';
+  });
+
+  // Crear un objeto para almacenar el recuento de reportes por origen y mes
+  const recuentoPorMesYOrigen = {};
+
+  // Iterar sobre los reportes y contar por origen y mes
+  datosFiltrados.forEach(reporte => {
+    const nombreMes = obtenerNombreMes(reporte);
+    const origen = reporte.origen_r;
+
+    // Inicializar el recuento si es la primera vez que vemos este origen en este mes
+    if (!recuentoPorMesYOrigen[nombreMes]) {
+      recuentoPorMesYOrigen[nombreMes] = {};
+    }
+    if (!recuentoPorMesYOrigen[nombreMes][origen]) {
+      recuentoPorMesYOrigen[nombreMes][origen] = 0;
+    }
+
+    // Incrementar el recuento
+    recuentoPorMesYOrigen[nombreMes][origen]++;
+  });
+
+  // Transformar el objeto y calcular el total por origen
+  const datosTabla = Object.keys(recuentoPorMesYOrigen).map(mes => {
+    const recuentoPorOrigen = recuentoPorMesYOrigen[mes];
+    const fila = {
+      Mes: mes,
+      ...recuentoPorOrigen,
+    };
+
+    // Calcular el total por origen y agregarlo a la fila
+    fila.Total = Object.values(recuentoPorOrigen).reduce((total, count) => total + count, 0);
+
+    return fila;
+  });
+
+  // Agregar la fila de totales al final
+  const filaTotales = {
+    Mes: 'Total',
+    ...Object.keys(recuentoPorMesYOrigen).reduce((totales, mes) => {
+      Object.keys(recuentoPorMesYOrigen[mes]).forEach(origen => {
+        if (!totales[origen]) {
+          totales[origen] = 0;
+        }
+        totales[origen] += recuentoPorMesYOrigen[mes][origen];
+      });
+      return totales;
+    }, {}),
+  };
+
+  datosTabla.push(filaTotales);
+
+  return datosTabla;
+    }
+  };
+  
+  const obtenerNombreMes = (reporte) => {
+    const [fechaPart] = reporte.fchareg.split(', ');
+    const [fecha] = fechaPart.split(' ');
+  
+    const [dia, mes, ano] = fecha.split('/');
+    const fechaDate = new Date(ano, mes - 1, dia);
+  
+    const opcionesNombreMes = { month: 'long' };
+    let nombreMes = new Intl.DateTimeFormat('es-ES', opcionesNombreMes).format(fechaDate);
+  
+    // Asegurarse de que la primera letra esté en mayúscula
+    nombreMes = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+  
+    return nombreMes;
+  };  
+
   return (
     <>
       <nav className="navbar bg-white fixed-top position-fixed top-0 shadow" style={{ background: "rgba(255, 255, 255, 0.8)" }}>
@@ -1051,6 +1190,12 @@ const obtencionFiltroAgente = (report) => {
               </li>
             </ul>
           </nav>
+          <Select
+            onChange={(selectedOption) => descargarTabla(selectedOption.value)}
+            options={opcionesSelect}
+            placeholder="Vistas"
+            className="custom-select"
+          />
           <div className="d-flex flex-row mb-1 ms-2 pagination-info">Datos mostrados: {rowsCount}</div>
         </div>
       </nav>
@@ -1244,7 +1389,7 @@ const obtencionFiltroAgente = (report) => {
             </tr>
             {reportes.map((dreportes) => (
               <tr key={dreportes.id}>
-                <th className="fixed-width-select" scope="row">{dreportes.id_report}</th>
+                <th className="fixed-width-select" scope="row"><a href={`/edit?id=${dreportes.id}`}>{dreportes.id_report}</a></th>
                 <td class="red-text">{dreportes.id_agente}</td>
                 <td>{dreportes.fchareg}</td>
                 <td>{dreportes.status}</td>
